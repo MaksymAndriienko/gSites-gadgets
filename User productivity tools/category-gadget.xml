@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Dynamic Height"
+    height="100">
+    <Require feature="dynamic-height"/>
+  </ModulePrefs>
+  <Content type="html">
+  <![CDATA[
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+  <script>
+function init(){
+    var url = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/od6/public/basic?alt=json";
+    $.ajax({
+        url:url,
+        async: false,
+        dataType:"jsonp",
+        success:function(data) {
+            createObj(data.feed.entry);
+        },
+    });
+
+    var arrayToShow = [];
+
+    function createObj(dataEntry){
+        dataEntry.forEach(function(response){
+            var returnObj = {};
+            response = response['content']['$t'].split(", ");
+
+            response.forEach(function(el){
+                var elArry = el.split(": ");
+                returnObj[elArry[0]] = elArry[1];
+            });
+            
+            arrayToShow.push(returnObj);
+        })
+        buildHtml(arrayToShow);
+    };
+
+  }
+  
+  function buildHtml(data){
+   var $wrapper = $('.capability__wrapper');
+    data.forEach(function(el, index){
+      $wrapper.append("<a target='_parent' class='capability__item " + (index >= 9 ? '':'active') + "' href='" + el.urltoapplication + "'><div class='capability__item_icon'><img src='" + el.urlicon + "' alt=''/></div><div class='capability__item_text'><div class='capability__item_title'>" + el.capabilities + "</div><div class='capability__item_description'>" + el.description + "</div></div></a>");
+    });
+    gadgets.window.adjustHeight();
+  }
+
+  function showAllCapability(){
+    $('.capability__item').each(function(index, el){
+      if(index >= 9){
+        $(el).toggleClass("active");
+        $(".more_capability").toggleClass("active");
+        if($(".more_capability").hasClass('active')){
+          $(".textButton").html("Hide more applications");
+        }
+        else{
+          $(".textButton").html("Show more applications");
+        }
+      }
+    });
+    gadgets.window.adjustHeight();
+  }
+  
+  window.addEventListener('DOMContentLoaded', init)
+</script> 
+ <style>
+      .capability__wrapper{
+        display: flex;
+        flex-wrap: wrap;
+        width: 1244px;
+        margin: 0 auto;
+    margin-top: 5px;
+      }
+      .capability__item{
+        width: 404px;
+        height: 167px;
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
+        border-radius: 6px;
+        display: none;
+        text-decoration: none;
+        margin-right: 16px;
+        margin-bottom: 16px;
+        transition: .3s;
+      }
+      .capability__item.active{
+        display: flex;
+      }
+      .capability__item:hover{
+        box-shadow: 0 10px 6px rgba(0, 0, 0, 0.09), 0 1px 6px rgba(0, 0, 0, 0.15);
+      }
+      .capability__item:nth-child(3n){
+        margin-right: 0;
+      }
+      .capability__item_icon{
+        width: 121px;
+        display: flex;
+        justify-content: center;
+        align-items: baseline;
+        margin-top: 51px;
+      }
+      .capability__item_text{
+        margin-top: 45px;
+        padding-right: 30px;
+        box-sizing: border-box;
+        width: calc(100% - 121px);
+      }
+      .capability__item_title{
+        color: #3e78bd;
+        font-family: Arial;
+        font-size: 25px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        margin-bottom: 2px;
+      }
+      .capability__item_description{
+        color: #000000;
+        font-family: Arial;
+        font-size: 18px;
+        font-weight: 600;
+        margin-left: 3px;
+      }
+      .more_capability{
+        width: 224px;
+        height: 49px;
+        position: relative;
+        border-radius: 6px;
+        background-color: #3e78bd;
+        display: flex;
+        margin-bottom: 25px;
+        color: #ffffff;
+        font-family: Arial;
+        font-size: 14px;
+        font-weight: 300;
+        letter-spacing: 0.32px;
+        border: 0;
+        padding-left: 50px;
+        margin: 0 auto;
+        margin-top: 20px;
+        cursor: pointer;
+      }
+      .arrowMore{
+        display: block;
+        background: url("https://sites.google.com/a/roche.com/user-productivity-tools/arrow.png") no-repeat;
+        width: 11px;
+        height: 6px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%) rotate(0);
+        left: 23px;
+        background-size: cover;
+        transition: .2s;
+      }
+      .active .arrowMore{
+        transform: translateY(-50%) rotate(180deg);
+      }
+</style> 
+ <div class="capability__wrapper"></div>
+ <button type="button" onclick="showAllCapability()" class="more_capability"><span class="arrowMore"></span><span class="textButton">Show more applications</span></button>
+  ]]>
+  </Content>
+</Module>
