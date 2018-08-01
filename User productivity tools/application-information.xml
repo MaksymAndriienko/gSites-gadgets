@@ -43,25 +43,44 @@
         };  
         gadgets.window.adjustHeight();
     }
-  window.addEventListener('DOMContentLoaded', init)
+
+    function showAllInformation(){
+        $(".details__information").toggleClass("active");
+        $(".more_capability").toggleClass("active");
+        if($(".more_capability").hasClass('active')){
+          $(".textButton").html("Read less");
+        }
+        else{
+          $(".textButton").html("Read more");
+        }
+        gadgets.window.adjustHeight();;
+    }
+
+    window.addEventListener('DOMContentLoaded', init)
 </script>
 <style>
     .information__wrapper{
-        height: 525px;
+        min-height: 525px;
         box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
         border-radius: 6px;
         background-color: #ffffff;
         width: calc(100% - 12px);
         margin: 0 auto;
         margin-top: 2px;
+        padding: 0 35px;
+        box-sizing: border-box;
+        margin-bottom: 6px;
+        padding-bottom: 44px;
     }
     .simple__information{
         padding-top: 52px;
         box-sizing: border-box;
+        border-bottom: 1px solid #e7e7e7;
+        padding-bottom: 13px;   
     }
     .simple__information_name{
         color: #3e78bd;
-        font-family: Arial;
+        font-family: Robotto, sans-serif;
         font-size: 30px;
         font-weight: 500;
         letter-spacing: 0.6px;
@@ -69,11 +88,114 @@
     }
     .simple__information_description{
         color: #000000;
-        font-family: Arial;
+        font-family: Robotto, sans-serif;
         font-size: 20px;
-        font-weight: 300;
+        font-weight: 600;
         letter-spacing: 0.4px;
         margin: 0;
+        margin-top: 2px;
+        height: 70px;
+    }
+    .details__information_box_title{
+        color: #000000;
+        font-family: Robotto, sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        letter-spacing: 0.4px;
+        margin: 0;
+        margin-bottom: 25px;
+    }
+    .details__information_box_list{
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        color: #000000;
+        font-family: Robotto, sans-serif;
+        font-size: 18px;
+        font-weight: 400;
+    }
+    .details__information_box_list li{
+        padding-left: 20px;
+        position: relative;
+        margin-bottom: 13px;
+    }
+    .details__information_box_list li:before{
+        content: '';
+        display: block;
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        background: #3e78bd;
+        border-radius: 50%;
+        left: 0;
+        top: 8px;
+    }
+    .details__information_col{
+        width: 510px;
+        display: inline-block;
+        vertical-align: top;
+        box-sizing: border-box;
+        padding-right: 40px;
+    }
+    .details__information_col.second{
+        width: 337px;
+    }
+    .details__information_col.last{
+        width: 317px;
+    }
+    .details__information{
+        padding-top: 29px;
+        box-sizing: border-box;
+        height: 240px;
+        overflow: hidden;   
+    }
+    .details__information.active{
+        height: auto;
+    }
+    .details__information_box_inner{
+        margin-bottom: 49px;
+    }
+    .details__information_box_inner p{
+        margin: 0;
+        padding: 0;
+        color: #000000;
+        font-family: Robotto, sans-serif;
+        font-size: 18px;
+        font-weight: 400;
+    }
+    .more_capability{
+        width: 115px;
+        height: 49px;
+        position: relative;
+        border-radius: 6px;
+        background-color: #3e78bd;
+        display: flex;
+        margin-bottom: 25px;
+        color: #ffffff;
+        font-family: Robotto, sans-serif;
+        font-size: 14px;
+        font-weight: 300;
+        letter-spacing: 0.32px;
+        border: 0;
+        padding-left: 32px;
+        margin: 0 auto;
+        margin-top: 20px;
+        cursor: pointer;
+    }
+    .arrowMore{
+        display: block;
+        background: url(https://sites.google.com/a/roche.com/user-productivity-tools/arrow.png) no-repeat;
+        width: 11px;
+        height: 6px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%) rotate(0);
+        left: 12px;
+        background-size: cover;
+        transition: .2s;
+    }
+    .active .arrowMore{
+        transform: translateY(-50%) rotate(180deg);
     }
 </style>
 <div class="information__wrapper">
@@ -106,7 +228,7 @@
                 </div>
             </div>
         </div>
-        <div class="details__information_col">
+        <div class="details__information_col second">
             <div class="details__information_box">
                 <p class="details__information_box_title">Cost</p>
                 <div class="details__information_box_inner">
@@ -126,7 +248,7 @@
                 </div>
             </div>
         </div>
-        <div class="details__information_col">
+        <div class="details__information_col last">
             <div class="details__information_box">
                 <p class="details__information_box_title">Approval policy</p>
                 <div class="details__information_box_inner">
@@ -141,7 +263,7 @@
             </div>
         </div>
     </div>
-    <button type="button" onclick="showAllCapability()" class="more_capability"><span class="arrowMore"></span><span class="textButton">Show more applications</span></button>
+    <button type="button" onclick="showAllInformation()" class="more_capability"><span class="arrowMore"></span><span class="textButton">Read more</span></button>
 </div>
   ]]>
   </Content>
