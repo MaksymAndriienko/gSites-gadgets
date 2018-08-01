@@ -39,7 +39,7 @@
                 
                 arrayToShow.push(returnObj);
             });
-            console.log(arrayToShow[0]);
+
             buildHTLM(arrayToShow[0]);
         };  
         gadgets.window.adjustHeight();
@@ -57,21 +57,23 @@
         var arrayAppOptions = [["cost", "Cost"], ["approvalpolicy", "Approval policy"], ["deliverytime", "Delivery time"], ["devicecompatibility", "Device compatibility"], ["mobileappavailability", "Mobile app availability"]];
 
         arrayAppOptions.forEach(function(el){
-            if(($(".details__information_col.second .details__information_box").length <=  $(".details__information_col.last .details__information_box").length) && app[el[0]]){
-                $(".details__information_col.second").append("<div class='details__information_box'> \
-                    <p class='details__information_box_title'>" + el[1] + "</p> \
-                    <div class='details__information_box_inner'> \
-                        <p>" + app[el[0]] + "</p> \
-                    </div> \
-                </div>");
-            }
-            else{
-                $(".details__information_col.last").append("<div class='details__information_box'> \
+            if(app[el[0]] != undefined){
+                if($(".details__information_col.second .details__information_box").length <=  $(".details__information_col.last .details__information_box").length){
+                    $(".details__information_col.second").append("<div class='details__information_box'> \
                         <p class='details__information_box_title'>" + el[1] + "</p> \
                         <div class='details__information_box_inner'> \
                             <p>" + app[el[0]] + "</p> \
                         </div> \
                     </div>");
+                }
+                else{
+                    $(".details__information_col.last").append("<div class='details__information_box'> \
+                            <p class='details__information_box_title'>" + el[1] + "</p> \
+                            <div class='details__information_box_inner'> \
+                                <p>" + app[el[0]] + "</p> \
+                            </div> \
+                        </div>");
+                }
             }
         });
     }
