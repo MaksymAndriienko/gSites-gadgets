@@ -38,10 +38,42 @@
                 });
                 
                 arrayToShow.push(returnObj);
-            })
-            console.log(arrayToShow);
+            });
+            console.log(arrayToShow[0]);
+            buildHTLM(arrayToShow[0]);
         };  
         gadgets.window.adjustHeight();
+    }
+
+    function buildHTLM(app){
+        $(".simple__information_name").html(app.applicationname);
+        $(".simple__information_description").html(app.description);
+
+        var listFunctions = app.crucialfunctions.split("\n");
+        listFunctions.forEach(function(el){
+            $(".details__information_box_list").append("<li>" + el + "</li>");
+        });
+
+        var arrayAppOptions = [["cost", "Cost"], ["approvalpolicy", "Approval policy"], ["deliverytime", "Delivery time"], ["devicecompatibility", "Device compatibility"], ["mobileappavailability", "Mobile app availability"]];
+
+        arrayAppOptions.forEach(function(el){
+            if(($(".details__information_col.second .details__information_box").length <=  $(".details__information_col.last .details__information_box").length) && app[el[0]]){
+                $(".details__information_col.second").append("<div class='details__information_box'> \
+                    <p class='details__information_box_title'>" + el[1] + "</p> \
+                    <div class='details__information_box_inner'> \
+                        <p>" + app[el[0]] + "</p> \
+                    </div> \
+                </div>");
+            }
+            else{
+                $(".details__information_col.last").append("<div class='details__information_box'> \
+                        <p class='details__information_box_title'>" + el[1] + "</p> \
+                        <div class='details__information_box_inner'> \
+                            <p>" + app[el[0]] + "</p> \
+                        </div> \
+                    </div>");
+            }
+        });
     }
 
     function showAllInformation(){
@@ -200,8 +232,8 @@
 </style>
 <div class="information__wrapper">
     <div class="simple__information">
-        <h2 class="simple__information_name">Smartsheet Enterprise</h2>
-        <p class="simple__information_description">Best online collaboration for project planning</p>
+        <h2 class="simple__information_name"></h2>
+        <p class="simple__information_description"></p>
     </div>
     <div class="details__information">
         <div class="details__information_col">
@@ -209,58 +241,15 @@
                 <p class="details__information_box_title">Crucial Functions</p>
                 <div class="details__information_box_inner">
                     <ul class="details__information_box_list">
-                        <li>Create task list</li>
-                        <li>Sub-task hierarchy (collapse/expand)</li>
-                        <li>Task dependencies</li>
-                        <li>Gantt & Calendar view</li>
-                        <li>Custom reports across projects</li>
-                        <li>Import & Export MS Project Files</li>
-                        <li>Cross-Project Resource Views</li>
-                        <li>Cross-Project Summary Views</li>
-                        <li>Share online</li>
-                        <li>Change Notifications</li>
-                        <li>File attachment on any task</li>
-                        <li>Discussions on any task</li>
-                        <li>Create custom fields</li>
-                        <li>Templates for Operations, IT, Marketing, HR</li>
-                        <li>Conditional Formatting</li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="details__information_col second">
-            <div class="details__information_box">
-                <p class="details__information_box_title">Cost</p>
-                <div class="details__information_box_inner">
-                    <p>$115 per user per year</p>
-                </div>
-            </div>
-            <div class="details__information_box">
-                <p class="details__information_box_title">Delivery time</p>
-                <div class="details__information_box_inner">
-                    <p>up to 5 days</p>
-                </div>
-            </div>
-            <div class="details__information_box">
-                <p class="details__information_box_title">Mobile app availability</p>
-                <div class="details__information_box_inner">
-                    <p>Native Android & iOS Apps</p>
-                </div>
-            </div>
+
         </div>
         <div class="details__information_col last">
-            <div class="details__information_box">
-                <p class="details__information_box_title">Approval policy</p>
-                <div class="details__information_box_inner">
-                    <p>Manager's approval required</p>
-                </div>
-            </div>
-            <div class="details__information_box">
-                <p class="details__information_box_title">Device compatibility</p>
-                <div class="details__information_box_inner">
-                    <p>up to 5 days</p>
-                </div>
-            </div>
+
         </div>
     </div>
     <button type="button" onclick="showAllInformation()" class="more_capability"><span class="arrowMore"></span><span class="textButton">Read more</span></button>
