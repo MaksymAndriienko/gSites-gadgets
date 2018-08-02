@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+    <ModulePrefs title="Similar supported applications"
+        height="10">
+        <Require feature="dynamic-height"/>
+    </ModulePrefs>
+    <Content type="html">
+        <![CDATA[
+            <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+            <script>
+            function init(){
+                var urlApp = (window.location != window.parent.location)
+                        ? document.referrer
+                        : document.location.href;
+                urlApp = urlApp.split("/");
+                urlApp = urlApp[urlApp.length - 1];
+
+                var applicationName = urlApp.replace("-", "%20");
+
+                var url = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/6/public/basic?alt=json&sq=applicationname=\"" + applicationName + "\"";
+                
+                $.ajax({
+                    url:url,
+                    async: false,
+                    dataType:"jsonp",
+                    success:function(data) {
+                        if(data.feed.entry){
+                            createObj(data.feed.entry);
+                        }
+                    },
+                });
+
+                var arrayToShow = [];
+
+                function createObj(dataEntry){
+                    dataEntry.forEach(function(response){
+                        var returnObj = {};
+                        response = response['content']['$t'].split(", ");
+
+                        response.forEach(function(el){
+                            var elArry = el.split(": ");
+                            returnObj[elArry[0]] = elArry[1];
+                        });
+                        
+                        arrayToShow.push(returnObj);
+                    })
+                    buildHTLM(arrayToShow);
+                };
+                gadgets.window.adjustHeight();
+            }
+        
+            function buildHTLM(apps){
+                var $wrapper = $('.not_recommeded_apps_inner_wrap');
+                apps.forEach(function(el){
+                    $wrapper.append("<a href='#' class='not_recommeded_app_item'> \
+                                        <p>" + el.notrecommendedapplicationname + "</p> \
+                                    </a>");
+                });
+                gadgets.window.adjustHeight();
+            }
+
+            window.addEventListener('DOMContentLoaded', init)
+            </script>
+            <style>
+                .not_recommeded_apps_wrapper{
+                    margin: 0 5px;
+                    padding-bottom: 1px;
+                }
+                .not_recommeded_apps_title{
+                    color: #000000;
+                    font-family: Roboto, sans-serif;
+                    font-size: 30px;
+                    font-weight: 700;
+                    letter-spacing: 0.6px;
+                    margin: 0 auto;
+                    margin-bottom: 23px;
+                }
+                .not_recommeded_apps_title i{
+                    text-decoration: underline;
+                    font-style: normal;
+                }
+                .not_recommeded_apps_inner{
+                    min-height: 305px;
+                    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
+                    border-radius: 6px;
+                    background-color: #ebebeb;
+                    padding-top: 33px;
+                    padding-left: 35px;
+                    padding-right: 35px;
+                    box-sizing: border-box;
+                }
+                .not_recommeded_apps_inner p {
+                    color: #000000;
+                    font-size: 20px;
+                    line-height: 29px;
+                    font-family: Roboto, sans-serif;
+                    font-weight: 600;
+                    letter-spacing: 0.4px;
+                    margin: 0;
+                    margin-bottom: 26px;
+                }
+                .not_recommeded_apps_inner p a{
+                    text-decoration: none;
+                    color: #3e78bd;
+                }
+                a.not_recommeded_app_item{
+                    display: inline-block;
+                    text-decoration: none;
+                    width: 380px;
+                    height: 90px;
+                    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
+                    border-radius: 6px;
+                    background-color: #ffffff;
+                    padding-top: 32px;
+                    padding-left: 32px;
+                    padding-right: 10px;
+                    box-sizing: border-box;
+                    margin-right: 13px;
+                }
+                a.not_recommeded_app_item:nth-child(3n){
+                    margin-right: 0;
+                }
+                a.not_recommeded_app_item p{
+                    color: #000000;
+                    font-family: Roboto, sans-serif;
+                    font-size: 25px;
+                    font-weight: 600;
+                    letter-spacing: 0.5px;
+                    line-height: 1;
+                    margin: 0;
+                }
+                .not_recommeded_apps_inner_wrap{
+                    margin-bottom: 31px;
+                }
+            </style>
+            <div class="not_recommeded_apps_wrapper">
+                <h2 class="not_recommeded_apps_title">Similiar <i>NOT recommended</i> applications for project planning</h2>
+                <div class="not_recommeded_apps_inner">
+                    <p>Following applications were veryfied and have not met companie's standards in terms of licence policy, supportability, costs, security. TODO add explainatin from end-user perspective</p>
+                    <div class="not_recommeded_apps_inner_wrap">
+
+                    </div>
+                    <p>If you would like to suggest a new tool please read information and fill in form on <a href="#">this site</a></p>
+                </div>
+            </div>
+        ]]>
+    </Content>
+</Module>
