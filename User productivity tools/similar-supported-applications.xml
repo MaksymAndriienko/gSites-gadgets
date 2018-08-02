@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+    <ModulePrefs title="Similar supported applications"
+        height="100">
+        <Require feature="dynamic-height"/>
+    </ModulePrefs>
+    <Content type="html">
+        <![CDATA[
+            <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+            <script>
+            function init(){
+                var urlApp = (window.location != window.parent.location)
+                        ? document.referrer
+                        : document.location.href;
+                urlApp = urlApp.split("/");
+                urlApp = urlApp[urlApp.length - 1];
+
+                var applicationName = urlApp.replace("-", "%20");
+
+                var url = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/5/public/basic?alt=json&sq=applicationname=\"" + applicationName + "\"";
+                
+                $.ajax({
+                    url:url,
+                    async: false,
+                    dataType:"jsonp",
+                    success:function(data) {
+                        if(data.feed.entry){
+                            createObj(data.feed.entry);
+                        }
+                    },
+                });
+
+                var arrayToShow = [];
+
+                function createObj(dataEntry){
+                    dataEntry.forEach(function(response){
+                        var returnObj = {};
+                        response = response['content']['$t'].split(", ");
+
+                        response.forEach(function(el){
+                            var elArry = el.split(": ");
+                            returnObj[elArry[0]] = elArry[1];
+                        });
+                        
+                        arrayToShow.push(returnObj);
+                    })
+                    buildHTLM(arrayToShow);
+                };
+                gadgets.window.adjustHeight();
+            }
+
+            function buildHTLM(apps){
+                var $wrapper = $('.supported_apps_wrapper__inner');
+                apps.forEach(function(el){
+                    var url = el.similarapplication.toLowerCase();
+                    url = url.replace(" ", "-");
+                    $wrapper.append("<a target='_parent' href='https://sites.google.com/a/roche.com/user-productivity-tools/supported-applications/" + url + "' class='supported_app_item'> \
+                                        <h4 class='supported_app_item_title'>" + el.similarapplication + "</h4> \
+                                        <p>" + el.shortdescription + "</p> \
+                                    </a>");
+                });
+                gadgets.window.adjustHeight();
+            }
+        
+            window.addEventListener('DOMContentLoaded', init)
+            </script>
+            <style>
+                .supported_apps_wrapper{
+                    margin: 0 5px;
+                }
+                a.supported_app_item{
+                    display: inline-block;
+                    width: 400px;
+                    height: 155px;
+                    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
+                    border-radius: 6px;
+                    background-color: #ffffff;
+                    text-decoration: none;
+                    vertical-align: top;
+                    padding-left: 33px;
+                    box-sizing: border-box;
+                    padding-top: 30px;
+                    padding-right: 25px;
+                    margin-right: 18px;
+                    margin-bottom: 15px;
+                }
+                a.supported_app_item:nth-child(3n){
+                    margin-right: 0;
+                }
+                .supported_app_item_title{
+                    color: #3e78bd;
+                    font-family: Roboto, sans-serif;
+                    font-size: 25px;
+                    font-weight: 500;
+                    letter-spacing: 0.5px;
+                    margin: 0;
+                    margin-bottom: 5px;
+                }
+                a.supported_app_item p {
+                    color: #000000;
+                    font-family: Roboto, sans-serif;
+                    font-size: 18px;
+                    font-weight: 600;
+                    letter-spacing: 0.36px;
+                    margin: 0;
+                }
+            </style>
+            <div class="supported_apps_wrapper">
+                <h2>Similiar supported applications for project planning</h2>
+                <div class="supported_apps_wrapper__inner">
+                    
+                </div>
+            </div>
+        ]]>
+    </Content>
+</Module>

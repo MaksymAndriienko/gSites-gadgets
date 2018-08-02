@@ -7,7 +7,7 @@
   <Content type="html">
   <![CDATA[
   <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-  <script>
+  <script type="text/javascript">
     function init(){
         var urlApp = (window.location != window.parent.location)
                 ? document.referrer
@@ -15,7 +15,9 @@
         urlApp = urlApp.split("/");
         urlApp = urlApp[urlApp.length - 1];
 
-        var url = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/3/public/basic?alt=json&sq=applicationname=" + urlApp;
+        var applicationName = urlApp.replace("-", "%20");
+
+        var url = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/4/public/basic?alt=json&sq=applicationname=\"" + applicationName + "\"";
         $.ajax({
             url:url,
             async: false,
