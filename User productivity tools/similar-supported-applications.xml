@@ -27,6 +27,9 @@
                         if(data.feed.entry){
                             createObj(data.feed.entry);
                         }
+                        else{
+                            $(".supported_apps_wrapper").css("display", "none");
+                        }
                     },
                 });
 
@@ -67,6 +70,16 @@
             <style>
                 .supported_apps_wrapper{
                     margin: 0 5px;
+                }
+                .supported_apps_wrapper h2{
+                    color: #000000;
+                    font-family: Roboto, sans-serif;
+                    font-size: 30px;
+                    font-weight: 700;
+                    letter-spacing: 0.6px;
+                    margin: 0;
+                    margin-bottom: 23px;
+                    margin-top: 10px;
                 }
                 a.supported_app_item{
                     display: inline-block;

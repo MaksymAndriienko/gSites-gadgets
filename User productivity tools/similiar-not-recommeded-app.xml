@@ -27,6 +27,9 @@
                         if(data.feed.entry){
                             createObj(data.feed.entry);
                         }
+                        else{
+                            $(".not_recommeded_apps_wrapper").css("display", "none");
+                        }
                     },
                 });
 
