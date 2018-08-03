@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Module>
-  <ModulePrefs title="Dynamic Height"
+  <ModulePrefs title="Category Module"
     height="100">
     <Require feature="dynamic-height"/>
   </ModulePrefs>
