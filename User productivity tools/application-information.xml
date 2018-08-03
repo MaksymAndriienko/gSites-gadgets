@@ -15,7 +15,7 @@
         urlApp = urlApp.split("/");
         urlApp = urlApp[urlApp.length - 1];
 
-        var applicationName = urlApp.replace("-", "%20");
+        var applicationName = urlApp.replace(new RegExp('-', 'g'), '%20');
 
         var url = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/4/public/basic?alt=json&sq=applicationname=\"" + applicationName + "\"";
         $.ajax({

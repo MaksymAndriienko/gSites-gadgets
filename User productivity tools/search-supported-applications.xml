@@ -12,10 +12,6 @@
                 var urlApp = (window.location != window.parent.location)
                         ? document.referrer
                         : document.location.href;
-                urlApp = urlApp.split("/");
-                urlApp = urlApp[urlApp.length - 1];
-
-                var applicationName = urlApp.replace("-", "%20");
 
                 var url = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/7/public/basic?alt=json";
                 
