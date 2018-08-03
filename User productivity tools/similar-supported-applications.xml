@@ -29,6 +29,7 @@
                         }
                         else{
                             $(".supported_apps_wrapper").css("display", "none");
+                            parent.closeIFrame();
                         }
                     },
                 });

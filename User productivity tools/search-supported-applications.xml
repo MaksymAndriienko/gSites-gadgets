@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+    <ModulePrefs title="Search supported applications"
+        height="100">
+        <Require feature="dynamic-height"/>
+    </ModulePrefs>
+    <Content type="html">
+        <![CDATA[
+            <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+            <script>
+            function init(){
+                var urlApp = (window.location != window.parent.location)
+                        ? document.referrer
+                        : document.location.href;
+                urlApp = urlApp.split("/");
+                urlApp = urlApp[urlApp.length - 1];
+
+                var applicationName = urlApp.replace("-", "%20");
+
+                var url = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/3/public/basic?alt=json";
+                
+                $.ajax({
+                    url:url,
+                    async: false,
+                    dataType:"jsonp",
+                    success:function(data) {
+                        createObj(data.feed.entry);
+                    },
+                });
+
+                var arrayToShow = [];
+
+                function createObj(dataEntry){
+                    dataEntry.forEach(function(response){
+                        var returnObj = {};
+                        response = response['content']['$t'].split(", ");
+
+                        response.forEach(function(el){
+                            var elArry = el.split(": ");
+                            returnObj[elArry[0]] = elArry[1];
+                        });
+                        
+                        arrayToShow.push(returnObj);
+                    })
+                    console.log(arrayToShow);
+                };
+                gadgets.window.adjustHeight();
+            }
+
+            window.addEventListener('DOMContentLoaded', init)
+            </script>
+        ]]>
+    </Content>
+</Module>
