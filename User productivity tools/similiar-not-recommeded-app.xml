@@ -29,6 +29,7 @@
                         }
                         else{
                             $(".not_recommeded_apps_wrapper").css("display", "none");
+                            gadgets.window.adjustHeight();
                         }
                     },
                 });
