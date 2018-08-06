@@ -7,6 +7,8 @@
     <Content type="html">
         <![CDATA[
             <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
             <script>
             function init(){
                 var urlApp = (window.location != window.parent.location)
@@ -39,12 +41,165 @@
                         arrayToShow.push(returnObj);
                     })
                     console.log(arrayToShow);
+                    buildHTLM(arrayToShow);
                 };
+                gadgets.window.adjustHeight();
+            }
+            
+            function buildHTLM(apps){
+                var $wrapper = $('.search__wrapper_inner');
+                apps.forEach(function(app){
+                    $wrapper.append("<a href='https://sites.google.com/a/roche.com/user-productivity-tools/supported-applications/" + app.url + "' class='application_item'> \
+                        <div class='application_item_information'> \
+                            <h4>" + app.applicationname + "</h4> \
+                            <p>" + app.capability + "</p> \
+                        </div> \
+                        <div class='application_item_description'>" + app.description + "</div> \
+                        <div class='application_item_read'>Read more</div></a>");
+                });
+                gadgets.window.adjustHeight();
+            }
+
+            function searchApps(){
+                var searchInput = $("#search_input");
+                var searchValue = searchInput.val().toUpperCase();
+                $(".application_item").each(function(index, el){
+                    if($(el).find(".application_item_information h4").html().toUpperCase().indexOf(searchValue) != -1 || $(el).find(".application_item_description").html().toUpperCase().indexOf(searchValue) != -1){
+                        $(el).css("display", "");
+                    }
+                    else{
+                        $(el).css("display", "none");
+                    }
+                });
                 gadgets.window.adjustHeight();
             }
 
             window.addEventListener('DOMContentLoaded', init)
             </script>
+            <style>
+                .search__wrapper{
+                    margin: 0 5px;
+                }
+                .search__wrapper h2{
+                    font-family: Minion;
+                    font-size: 30px;
+                    font-weight: bold;
+                    font-style: italic;
+                    font-stretch: normal;
+                    line-height: normal;
+                    letter-spacing: 0.6px;
+                    color: #000000;
+                }
+                a.application_item{
+                    display: block;
+                    height: 110px;
+                    border-radius: 6px;
+                    background-color: #ffffff;
+                    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.15);
+                    width: 100%;
+                    text-decoration: none;
+                    margin-bottom: 15px;
+                }
+                .application_item_information{
+                    display: inline-block;
+                    padding-top: 27px;
+                    box-sizing: border-box;
+                    width: 380px;
+                    padding-left: 33px;
+                }
+                .application_item_information h4{
+                    margin: 0;
+                    font-family: Imago, Roboto, sans-serif;
+                    font-size: 25px;
+                    font-weight: 600;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: normal;
+                    letter-spacing: 0.5px;
+                    margin-bottom: 3px;
+                    color: #3e78bd;
+                }
+                .application_item_information p{
+                    margin: 0;
+                    font-family: Imago, Roboto, sans-serif;
+                    font-size: 18px;
+                    font-weight: normal;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: normal;
+                    letter-spacing: 0.4px;
+                    color: #000000;
+                }
+                .application_item_description{
+                    display: inline-block;
+                    vertical-align: top;
+                    font-family: Imago, Roboto, sans-serif;
+                    font-size: 18px;
+                    font-weight: normal;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: normal;
+                    letter-spacing: 0.4px;
+                    color: #000000;
+                    box-sizing: border-box;
+                    padding-top: 42px;
+                    padding-left: 42px;
+                    width: 666px;
+                }
+                .application_item_read{
+                    display: inline-block;
+                    vertical-align: top;
+                    font-family: Imago, Roboto, sans-serif;
+                    font-size: 18px;
+                    font-weight: 600;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: normal;
+                    letter-spacing: 0.4px;
+                    color: #3e78bd;
+                    box-sizing: border-box;
+                    padding-top: 42px;
+                }
+                .search__wrapper_func{
+                    height: 90px;
+                    border-radius: 6px;
+                    background-color: #ebebeb;
+                    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.15);
+                    box-sizing: border-box;
+                    padding-top: 15px;
+                    margin-bottom: 21px;
+                    padding-left: 16px;
+                }
+                #search_input{
+                    width: 800px;
+                    height: 60px;
+                    border-radius: 6px;
+                    background-color: #ffffff;
+                    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.15);
+                    border: 0;
+                    outline: 0;    
+                    padding-left: 15px;
+                    font-family: Imago;
+                    font-size: 20px;
+                    font-weight: normal;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: normal;
+                    letter-spacing: 0.4px;
+                    color: #000000;
+                }
+            </style>
+            <div class="search__wrapper">
+                <h2>Supported application</h2>
+                
+                <div class="search__wrapper_func">
+                    <input type="text" name="search_input" id="search_input" placeholder="Search for application" onkeyup="searchApps()">
+                </div>
+
+                <div class="search__wrapper_inner">
+
+                </div>
+            </div>
         ]]>
     </Content>
 </Module>
