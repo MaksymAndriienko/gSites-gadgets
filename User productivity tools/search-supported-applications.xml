@@ -7,9 +7,12 @@
     <Content type="html">
         <![CDATA[
             <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+            <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
             <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
             <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
             <script>
+
             function init(){
                 var urlApp = (window.location != window.parent.location)
                         ? document.referrer
@@ -29,6 +32,8 @@
                 var arrayToShow = [];
 
                 function createObj(dataEntry){
+                    var availableApps = [];
+                    var availableCapability = [];
                     dataEntry.forEach(function(response){
                         var returnObj = {};
                         response = response['content']['$t'].split(", ");
@@ -37,13 +42,35 @@
                             var elArry = el.split(": ");
                             returnObj[elArry[0]] = elArry[1];
                         });
-                        
+                        availableApps.push(returnObj['applicationname']);
+                        availableCapability.indexOf(returnObj['capability']) == -1 ? availableCapability.push(returnObj['capability']):'';
                         arrayToShow.push(returnObj);
                     })
-                    console.log(arrayToShow);
+
                     buildHTLM(arrayToShow);
+                    createAutocomplite(availableApps);
+                    createCapabilityFilter(availableCapability);
                 };
                 gadgets.window.adjustHeight();
+            }
+
+            function createCapabilityFilter(availableCapability){
+                availableCapability.forEach(function(el){
+                    $("#capabilitySearch").append("<option value='" + el + "'>" + el + "</option>")
+                });
+                $('#capabilitySearch').select2();
+            }
+
+            function createAutocomplite(availableApps){
+                $("#search_input").autocomplete({
+                    source: availableApps,
+                    open: function(){
+                        $("#search_input").addClass("openAuto");
+                    },
+                    close: function(){
+                        $("#search_input").removeClass("openAuto");
+                    }
+                });
             }
             
             function buildHTLM(apps){
@@ -60,23 +87,72 @@
                 gadgets.window.adjustHeight();
             }
 
+            function onChangeSelect(){
+                var selectedCapability = $("#capabilitySearch").val();
+                var isEmpty = true;
+                $(".application_item").each(function(index, el){
+                    if($(el).find(".application_item_information p").html() != selectedCapability && selectedCapability != "All application capabilities"){
+                        $(el).addClass("hiddeCapability");
+                    }
+                    else{
+                        $(el).removeClass("hiddeCapability");
+                        isEmpty = false;
+                        if($(el).css('display') == 'none' && selectedCapability != "All application capabilities") {
+                            isEmpty = true;
+                        }
+                    }
+                });
+                handlerError(isEmpty);
+                gadgets.window.adjustHeight();
+            }
+
+            function handlerError(isEmpty){
+                isEmpty ? $(".search_error").css('display', ''):$(".search_error").css('display', 'none');
+            }
+
             function searchApps(){
                 var searchInput = $("#search_input");
+                var isEmpty = true;
                 var searchValue = searchInput.val().toUpperCase();
-                $(".application_item").each(function(index, el){
+                $(".application_item:not(.hiddeCapability)").each(function(index, el){
                     if($(el).find(".application_item_information h4").html().toUpperCase().indexOf(searchValue) != -1 || $(el).find(".application_item_description").html().toUpperCase().indexOf(searchValue) != -1){
                         $(el).css("display", "");
+                        isEmpty = false;
                     }
                     else{
                         $(el).css("display", "none");
                     }
                 });
+                handlerError(isEmpty);
                 gadgets.window.adjustHeight();
             }
 
             window.addEventListener('DOMContentLoaded', init)
             </script>
             <style>
+                .ui-widget.ui-widget-content{
+                     border: 0;
+                }
+                .ui-widget-content{
+                    border-top: 1px solid #dddddd !important;
+                    background: #ffffff;
+                    color: #333333;
+                    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.15);
+                    border-radius: 0 0 6px 6px;
+                    overflow: hidden;
+                }
+                .ui-menu .ui-menu-item{
+                    height: 40px;
+                }
+                .ui-menu .ui-menu-item-wrapper {
+                    position: relative;
+                    padding: 11px 1em 3px .4em;
+                    height: 100%;
+                    box-sizing: border-box;
+                }
+                #search_input.openAuto{
+                    border-radius: 6px 6px 0 0;
+                }
                 .search__wrapper{
                     margin: 0 5px;
                 }
@@ -187,6 +263,79 @@
                     line-height: normal;
                     letter-spacing: 0.4px;
                     color: #000000;
+                    margin-right: 14px;
+                }
+                .select2-container {
+                    box-sizing: border-box;
+                    display: inline-block;
+                    margin: 0;
+                    position: relative;
+                    vertical-align: middle;
+                    width: 397px !important;
+                    height: 60px;
+                    border-radius: 6px;
+                    background-color: #ffffff;
+                    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.15);
+                    margin-top: -4px;
+                }
+                .select2-container .select2-selection--single {
+                    box-sizing: border-box;
+                    cursor: pointer;
+                    display: block;
+                    height: 60px;
+                    user-select: none;
+                    -webkit-user-select: none;
+                    border: 0 !important;
+                }
+                .select2-container--default .select2-selection--single .select2-selection__rendered {
+                    line-height: 60px;
+                    font-family: Imago;
+                    padding-left: 20px;
+                    font-size: 20px;
+                    font-weight: normal;
+                    font-style: normal;
+                    font-stretch: normal;
+                    letter-spacing: 0.4px;
+                    color: #000000;
+                }
+                .select2-container--default .select2-selection--single .select2-selection__arrow {
+                    height: 26px;
+                    position: absolute;
+                    top: 17px;
+                    right: 1px;
+                    width: 20px;
+                }
+                .select2-container--open .select2-dropdown--below {
+                    border-top: none;
+                    border-top-left-radius: 0;
+                    border-top-right-radius: 0;
+                    border-radius: 0 0 6px 6px;
+                    background-color: #ffffff;
+                    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.15);
+                    border: 0;
+                    border-top: 1px solid #ccc;
+                }
+                .hiddeCapability{
+                    display: none !important;
+                }
+                .search_error{
+                    height: 110px;
+                    border-radius: 6px;
+                    background-color: #d21111;
+                    box-shadow: 0 2px 8px 0 rgba(189, 0, 0, 0.45
+                    width: 100%;
+                    text-decoration: none;
+                    margin-bottom: 46px;
+                    text-align: center;
+                    line-height: 110px;
+                    font-family: Imago;
+                    font-size: 20px;
+                    font-weight: 600;
+                    font-style: normal;
+                    font-stretch: normal;
+                    letter-spacing: 0.4px;
+                    color: #ffffff;
+                    margin-top: 60px;
                 }
             </style>
             <div class="search__wrapper">
@@ -194,10 +343,15 @@
                 
                 <div class="search__wrapper_func">
                     <input type="text" name="search_input" id="search_input" placeholder="Search for application" onkeyup="searchApps()">
+                    <select name="capabilitySearch" id="capabilitySearch" onchange="onChangeSelect()">
+                        <option value="All application capabilities">All application capabilities</option>
+                    </select>
                 </div>
 
                 <div class="search__wrapper_inner">
-
+                    <div class="search_error" style="display: none;">
+                        Not found data
+                    </div>
                 </div>
             </div>
         ]]>
