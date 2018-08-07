@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Menu module"
+    height="37">
+    <Require feature="dynamic-height"/>
+  </ModulePrefs>
+  <Content type="html">
+  <![CDATA[
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script>
+        var urlApp = (window.location != window.parent.location)
+                        ? document.referrer
+                        : document.location.href;
+
+        function init(){
+            var splitted_url = urlApp.split("/");
+            $(".menu__wrapper_inner a").each(function(){
+                if(splitted_url[5] == "user-productivity-tools" && splitted_url[6] == ""){
+                    $($('.menu__wrapper_inner a')[0]).addClass('active');
+                }
+                else if(splitted_url[6] != ""){
+                    $($('.menu__wrapper_inner a')[1]).addClass('active');
+                }
+            });
+        }
+        window.addEventListener('DOMContentLoaded', init)
+    </script>
+    <style>
+        .menu__wrapper_inner ul{
+            list-style: none;
+            display: flex;
+            padding-left: 7px;
+            margin: 0;
+        }
+        .menu__wrapper_inner a{
+            list-style: none;
+            display: flex;
+            opacity: 0.7;
+            font-family: Imago;
+            font-size: 16px;
+            font-weight: normal;
+            font-style: normal;
+            font-stretch: normal;
+            line-height: normal;
+            letter-spacing: 0.3px;
+            text-decoration: none;
+            color: #000000;
+            transition: .2s;
+            margin-right: 30px;
+            padding-bottom: 11px;
+            position: relative;
+        }
+        .menu__wrapper_inner a:before{
+            content: "";
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background-color: #3e78bd;
+            left: 0;
+            bottom: 0;
+            transform: scaleX(0);
+            transition: .2s;
+        }
+        .menu__wrapper_inner a.active:before,
+        .menu__wrapper_inner a:hover:before{
+            transform: scaleX(1);
+        }
+        .menu__wrapper_inner a.active,
+        .menu__wrapper_inner a:hover{
+            opacity: 1;
+        }
+    </style>
+    <div class="menu__wrapper">
+        <div class="menu__wrapper_inner">
+            <ul>
+                <li><a target="_top" href="https://sites.google.com/a/roche.com/user-productivity-tools">Home</li>
+                <li><a target="_top" href="https://sites.google.com/a/roche.com/user-productivity-tools/supported-applications">Supported applications</li>
+            </ul>
+        </div>
+    </div>
+  ]]>
+  </Content>
+</Module>
