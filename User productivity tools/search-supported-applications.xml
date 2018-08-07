@@ -87,37 +87,27 @@
                 gadgets.window.adjustHeight();
             }
 
-            function onChangeSelect(){
-                var selectedCapability = $("#capabilitySearch").val();
-                var isEmpty = true;
-                $(".application_item").each(function(index, el){
-                    if($(el).find(".application_item_information p").html() != selectedCapability && selectedCapability != "All application capabilities"){
-                        $(el).addClass("hiddeCapability");
-                    }
-                    else{
-                        $(el).removeClass("hiddeCapability");
-                        isEmpty = false;
-                        if($(el).css('display') == 'none' && selectedCapability != "All application capabilities") {
-                            isEmpty = true;
-                        }
-                    }
-                });
-                handlerError(isEmpty);
-                gadgets.window.adjustHeight();
-            }
-
             function handlerError(isEmpty){
                 isEmpty ? $(".search_error").css('display', ''):$(".search_error").css('display', 'none');
             }
 
             function searchApps(){
                 var searchInput = $("#search_input");
-                var isEmpty = true;
+
+                var selectedCapability = $("#capabilitySearch").val();
                 var searchValue = searchInput.val().toUpperCase();
-                $(".application_item:not(.hiddeCapability)").each(function(index, el){
-                    if($(el).find(".application_item_information h4").html().toUpperCase().indexOf(searchValue) != -1 || $(el).find(".application_item_description").html().toUpperCase().indexOf(searchValue) != -1){
-                        $(el).css("display", "");
-                        isEmpty = false;
+                
+                var isEmpty = true;
+
+                $(".application_item").each(function(index, el){
+                    if(($(el).find(".application_item_information h4").html().toUpperCase().indexOf(searchValue) != -1 || $(el).find(".application_item_description").html().toUpperCase().indexOf(searchValue) != -1)){
+                        if(selectedCapability == "All application capabilities" || $(el).find(".application_item_information p").html() == selectedCapability){
+                            $(el).css("display", "");    
+                            isEmpty = false;
+                        }
+                        else{
+                            $(el).css("display", "none");
+                        }
                     }
                     else{
                         $(el).css("display", "none");
@@ -322,7 +312,7 @@
                     height: 110px;
                     border-radius: 6px;
                     background-color: #d21111;
-                    box-shadow: 0 2px 8px 0 rgba(189, 0, 0, 0.45
+                    box-shadow: 0 2px 8px 0 rgba(189, 0, 0, 0.45);
                     width: 100%;
                     text-decoration: none;
                     margin-bottom: 46px;
@@ -343,7 +333,7 @@
                 
                 <div class="search__wrapper_func">
                     <input type="text" name="search_input" id="search_input" placeholder="Search for application" onkeyup="searchApps()">
-                    <select name="capabilitySearch" id="capabilitySearch" onchange="onChangeSelect()">
+                    <select name="capabilitySearch" id="capabilitySearch" onchange="searchApps()">
                         <option value="All application capabilities">All application capabilities</option>
                     </select>
                 </div>
