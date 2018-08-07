@@ -70,7 +70,7 @@ function init(){
         flex-wrap: wrap;
         width: 1244px;
         margin: 0 auto;
-    margin-top: 5px;
+        margin-top: 5px;
       }
       .capability__item{
         width: 404px;
@@ -97,28 +97,34 @@ function init(){
         display: flex;
         justify-content: center;
         align-items: baseline;
-        margin-top: 51px;
+        margin-top: 61px;
       }
       .capability__item_text{
-        margin-top: 45px;
+        margin-top: 53px;
         padding-right: 30px;
         box-sizing: border-box;
         width: calc(100% - 121px);
       }
       .capability__item_title{
-        color: #3e78bd;
-        font-family: Arial;
+        margin-bottom: 3px;
+        font-family: Imago, 'PT Sans', sans-serif;
         font-size: 25px;
-        font-weight: 500;
+        font-weight: 600;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
         letter-spacing: 0.5px;
-        margin-bottom: 2px;
+        color: #3e78bd;
       }
       .capability__item_description{
-        color: #000000;
-        font-family: Arial;
+        font-family: Imago, 'PT Sans', sans-serif;
         font-size: 18px;
-        font-weight: 600;
-        margin-left: 3px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: 0.4px;
+        color: #000000;
       }
       .more_capability{
         width: 224px;
