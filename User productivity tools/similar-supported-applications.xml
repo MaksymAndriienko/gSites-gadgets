@@ -73,14 +73,15 @@
                     margin: 0 5px;
                 }
                 .supported_apps_wrapper h2{
-                    color: #000000;
-                    font-family: Roboto, sans-serif;
+                    font-family: Minion;
                     font-size: 30px;
-                    font-weight: 700;
+                    font-weight: bold;
+                    font-style: italic;
+                    font-stretch: normal;
+                    line-height: normal;
                     letter-spacing: 0.6px;
-                    margin: 0;
-                    margin-bottom: 23px;
-                    margin-top: 10px;
+                    color: #000000;
+                    margin-top: 7px;
                 }
                 a.supported_app_item{
                     display: inline-block;
@@ -93,30 +94,43 @@
                     vertical-align: top;
                     padding-left: 33px;
                     box-sizing: border-box;
-                    padding-top: 30px;
+                    padding-top: 27px;
                     padding-right: 25px;
                     margin-right: 18px;
                     margin-bottom: 15px;
+                    position: relative;
+                    top: 0;
+                    transition: .3s;
+                }
+                a.supported_app_item:hover{
+                    top: -5px;
+                    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.15), 0 10px 6px 0 rgba(0, 0, 0, 0.09), 0 1px 6px 0 rgba(0, 0, 0, 0.15);
                 }
                 a.supported_app_item:nth-child(3n){
                     margin-right: 0;
                 }
                 .supported_app_item_title{
-                    color: #3e78bd;
-                    font-family: Roboto, sans-serif;
-                    font-size: 25px;
-                    font-weight: 500;
-                    letter-spacing: 0.5px;
                     margin: 0;
-                    margin-bottom: 5px;
+                    font-family: Imago;
+                    font-size: 25px;
+                    font-weight: 600;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: normal;
+                    letter-spacing: 0.5px;
+                    color: #3e78bd;
                 }
                 a.supported_app_item p {
-                    color: #000000;
-                    font-family: Roboto, sans-serif;
-                    font-size: 18px;
-                    font-weight: 600;
-                    letter-spacing: 0.36px;
                     margin: 0;
+                    font-family: Imago;
+                    font-size: 18px;
+                    font-weight: normal;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: normal;
+                    letter-spacing: 0.4px;
+                    color: #000000;
+                    margin-top: 3px;
                 }
             </style>
             <div class="supported_apps_wrapper">

@@ -25,6 +25,7 @@
                     dataType:"jsonp",
                     success:function(data) {
                         if(data.feed.entry){
+                            console.log(data.feed.entry);
                             createObj(data.feed.entry);
                         }
                         else{
@@ -56,7 +57,7 @@
             function buildHTLM(apps){
                 var $wrapper = $('.not_recommeded_apps_inner_wrap');
                 apps.forEach(function(el){
-                    $wrapper.append("<a href='#' class='not_recommeded_app_item'> \
+                    $wrapper.append("<a class='not_recommeded_app_item'> \
                                         <p>" + el.notrecommendedapplicationname + "</p> \
                                     </a>");
                 });
@@ -71,37 +72,40 @@
                     padding-bottom: 1px;
                 }
                 .not_recommeded_apps_title{
-                    color: #000000;
-                    font-family: Roboto, sans-serif;
+                    font-family: Minion;
                     font-size: 30px;
-                    font-weight: 700;
+                    font-weight: bold;
+                    font-style: italic;
+                    font-stretch: normal;
+                    line-height: normal;
                     letter-spacing: 0.6px;
-                    margin: 0 auto;
-                    margin-bottom: 23px;
+                    color: #000000;
+                    margin-top: 22px;
                 }
                 .not_recommeded_apps_title i{
                     text-decoration: underline;
-                    font-style: normal;
                 }
                 .not_recommeded_apps_inner{
-                    min-height: 305px;
+                    min-height: 260px;
+                    padding-bottom: 20px;
                     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
                     border-radius: 6px;
                     background-color: #ebebeb;
-                    padding-top: 33px;
+                    padding-top: 9px;
                     padding-left: 35px;
                     padding-right: 35px;
                     box-sizing: border-box;
                 }
                 .not_recommeded_apps_inner p {
-                    color: #000000;
+                    font-family: Imago;
                     font-size: 20px;
-                    line-height: 29px;
-                    font-family: Roboto, sans-serif;
-                    font-weight: 600;
+                    font-weight: normal;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: 1.65;
                     letter-spacing: 0.4px;
-                    margin: 0;
-                    margin-bottom: 26px;
+                    color: #000000;
+                    margin-bottom: 25px;
                 }
                 .not_recommeded_apps_inner p a{
                     text-decoration: none;
@@ -125,13 +129,15 @@
                     margin-right: 0;
                 }
                 a.not_recommeded_app_item p{
-                    color: #000000;
-                    font-family: Roboto, sans-serif;
-                    font-size: 25px;
-                    font-weight: 600;
-                    letter-spacing: 0.5px;
-                    line-height: 1;
                     margin: 0;
+                    font-family: Imago;
+                    font-size: 25px;
+                    font-weight: normal;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: normal;
+                    letter-spacing: 0.5px;
+                    color: #000000;
                 }
                 .not_recommeded_apps_inner_wrap{
                     margin-bottom: 31px;
@@ -140,11 +146,10 @@
             <div class="not_recommeded_apps_wrapper">
                 <h2 class="not_recommeded_apps_title">Similiar <i>NOT recommended</i> applications for project planning</h2>
                 <div class="not_recommeded_apps_inner">
-                    <p>Following applications were veryfied and have not met companie's standards in terms of licence policy, supportability, costs, security. TODO add explainatin from end-user perspective</p>
+                    <p>Following applications were veryfied and have not met companie's standards in terms of <b>licence policy, supportability, costs, security</b>. TODO add explainatin from end-user perspective</p>
                     <div class="not_recommeded_apps_inner_wrap">
 
                     </div>
-                    <p>If you would like to suggest a new tool please read information and fill in form on <a href="#">this site</a></p>
                 </div>
             </div>
         ]]>

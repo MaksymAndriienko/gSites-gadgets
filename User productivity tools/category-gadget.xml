@@ -38,17 +38,20 @@ function init(){
 
   }
   
+  var countToVisible = "";
+
   function buildHtml(data){
    var $wrapper = $('.capability__wrapper');
+   countToVisible = data[0].countvisibleapps;
     data.forEach(function(el, index){
-      $wrapper.append("<a target='_parent' class='capability__item " + (index >= 9 ? '':'active') + "' href='" + el.urltoapplication + "'><div class='capability__item_icon'><img src='" + el.urlicon + "' alt=''/></div><div class='capability__item_text'><div class='capability__item_title'>" + el.capabilities + "</div><div class='capability__item_description'>" + el.description + "</div></div></a>");
+      $wrapper.append("<a target='_parent' class='capability__item " + (index >= countToVisible ? '':'active') + "' href='" + el.urltoapplication + "'><div class='capability__item_icon'><img src='" + el.urlicon + "' alt=''/></div><div class='capability__item_text'><div class='capability__item_title'>" + el.capabilities + "</div><div class='capability__item_description'>" + el.description + "</div></div></a>");
     });
     gadgets.window.adjustHeight();
   }
 
   function showAllCapability(){
     $('.capability__item').each(function(index, el){
-      if(index >= 9){
+      if(index >= countToVisible){
         $(el).toggleClass("active");
         $(".more_capability").toggleClass("active");
         if($(".more_capability").hasClass('active')){

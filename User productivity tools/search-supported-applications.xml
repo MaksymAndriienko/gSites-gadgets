@@ -77,7 +77,7 @@
             function buildHTLM(apps){
                 var $wrapper = $('.search__wrapper_inner');
                 apps.forEach(function(app){
-                    $wrapper.append("<a href='https://sites.google.com/a/roche.com/user-productivity-tools/supported-applications/" + app.url + "' class='application_item'> \
+                    $wrapper.append("<a target='_parent' href='https://sites.google.com/a/roche.com/user-productivity-tools/supported-applications/" + app.url + "' class='application_item'> \
                         <div class='application_item_information'> \
                             <h4>" + app.applicationname + "</h4> \
                             <p>" + app.capability + "</p> \
