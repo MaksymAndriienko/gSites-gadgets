@@ -19,40 +19,83 @@
                         ? document.referrer
                         : document.location.href;
 
-                var url = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/7/public/basic?alt=json";
-                
+                var url = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/7/public/full?alt=json";
+                var urlCapability = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/od6/public/full?alt=json";
+
+                sendRequest(url, createObj);
+                sendRequest(urlCapability, createObjCapability);
+
+                gadgets.window.adjustHeight();
+            }
+
+            function createObj(dataEntry){
+                var availableApps = [];
+                var availableCapability = [];
+                var arrayToShow = [];
+            
+                dataEntry.forEach(function(response){
+                    var returnObj = {};
+                    returnObj["description"] = response['gsx$description']['$t'];
+                    response = response['content']['$t'].split(", ");
+
+                    response.forEach(function(el){
+                        var elArry = el.split(": ");
+                        if(elArry[0] != "description"){
+                            returnObj[elArry[0]] = elArry[1];
+                        }
+                    });
+                    availableApps.push(returnObj['applicationname']);
+                    availableCapability.indexOf(returnObj['capability']) == -1 ? availableCapability.push(returnObj['capability']):'';
+                    arrayToShow.push(returnObj);
+                })
+
+                buildHTLM(arrayToShow);
+                createAutocomplite(availableApps);
+                createCapabilityFilter(availableCapability);
+                gadgets.window.adjustHeight();
+            };
+
+            function createObjCapability(dataEntry){
+                var arrayToShow = [];
+                dataEntry.forEach(function(response){
+                    var returnObj = {};
+                    returnObj["description"] = response['gsx$description']['$t'];
+                    response = response['content']['$t'].split(", ");
+                    response.forEach(function(el){
+                        var elArry = el.split(": ");
+                        if(elArry[0] != "description"){
+                        returnObj[elArry[0]] = elArry[1];
+                        }
+                    });
+                    
+                    arrayToShow.push(returnObj);
+                })
+                buildHtmlCapability(arrayToShow);
+            };
+
+            var countToVisible = "";
+            
+            function buildHtmlCapability(data){
+                var $wrapper = $('.capability__wrapper');
+                countToVisible = data[0].countvisibleapps;
+                    data.forEach(function(el, index){
+                    var url = "https://sites.google.com/a/roche.com/user-productivity-tools/supported-applications/" + el.urltoapplication.toLowerCase().replace(new RegExp(' ', 'g'), '-');
+                    $wrapper.append("<a target='_parent' class='capability__item " + (index >= countToVisible ? '':'active') + "' href='" + url + "'><div class='capability__item_icon'><img src='" + el.urlicon + "' alt=''/></div><div class='capability__item_text'><div class='capability__item_title'>" + el.capabilities + "</div><div class='capability__item_description'>" + el.description + "</div></div></a>");
+                    });
+                gadgets.window.adjustHeight();
+            }
+
+            function sendRequest(url, buildFunction){
                 $.ajax({
                     url:url,
                     async: false,
                     dataType:"jsonp",
                     success:function(data) {
-                        createObj(data.feed.entry);
+                        if(data.feed.entry){
+                            buildFunction(data.feed.entry);
+                        }
                     },
                 });
-
-                var arrayToShow = [];
-
-                function createObj(dataEntry){
-                    var availableApps = [];
-                    var availableCapability = [];
-                    dataEntry.forEach(function(response){
-                        var returnObj = {};
-                        response = response['content']['$t'].split(", ");
-
-                        response.forEach(function(el){
-                            var elArry = el.split(": ");
-                            returnObj[elArry[0]] = elArry[1];
-                        });
-                        availableApps.push(returnObj['applicationname']);
-                        availableCapability.indexOf(returnObj['capability']) == -1 ? availableCapability.push(returnObj['capability']):'';
-                        arrayToShow.push(returnObj);
-                    })
-
-                    buildHTLM(arrayToShow);
-                    createAutocomplite(availableApps);
-                    createCapabilityFilter(availableCapability);
-                };
-                gadgets.window.adjustHeight();
             }
 
             function createCapabilityFilter(availableCapability){
@@ -96,6 +139,7 @@
                 var searchInput = $("#search_input");
 
                 var selectedCapability = $("#capabilitySearch").val();
+                $(".mainError i").html(searchInput.val());
                 var searchValue = searchInput.val().toUpperCase();
                 
                 var isEmpty = true;
@@ -115,6 +159,22 @@
                     }
                 });
                 handlerError(isEmpty);
+                gadgets.window.adjustHeight();
+            }
+
+            function showAllCapability(){
+                $('.capability__item').each(function(index, el){
+                if(index >= countToVisible){
+                    $(el).toggleClass("active");
+                    $(".more_capability").toggleClass("active");
+                    if($(".more_capability").hasClass('active')){
+                    $(".textButton").html("Hide more applications");
+                    }
+                    else{
+                    $(".textButton").html("Show more applications");
+                    }
+                }
+                });
                 gadgets.window.adjustHeight();
             }
 
@@ -345,25 +405,6 @@
                 .hiddeCapability{
                     display: none !important;
                 }
-                .search_error{
-                    height: 110px;
-                    border-radius: 6px;
-                    background-color: #d21111;
-                    box-shadow: 0 2px 8px 0 rgba(189, 0, 0, 0.45);
-                    width: 100%;
-                    text-decoration: none;
-                    margin-bottom: 46px;
-                    text-align: center;
-                    line-height: 110px;
-                    font-family: Imago;
-                    font-size: 20px;
-                    font-weight: 600;
-                    font-style: normal;
-                    font-stretch: normal;
-                    letter-spacing: 0.4px;
-                    color: #ffffff;
-                    margin-top: 60px;
-                }
                 .select2-container--default .select2-selection--single .select2-selection__arrow {
                     height: 26px;
                     position: absolute;
@@ -389,6 +430,145 @@
                 .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b {
                     transform: rotate(180deg);
                 }
+                .search_error{
+                    text-align: center;
+                    padding-top: 73px;
+                    box-sizing: border-box;
+                }
+                .mainError{
+                    font-family: Imago, sans-serif;
+                    font-size: 30px;
+                    font-weight: 600;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: normal;
+                    letter-spacing: 0.6px;
+                    text-align: center;
+                    color: #000000;
+                    margin-top: 40px;
+                }
+                .mainErrorMal{
+                    font-family: Imago, sans-serif;
+                    font-size: 20px;
+                    font-weight: normal;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: normal;
+                    letter-spacing: 0.4px;
+                    text-align: center;
+                    color: #000000;
+                    margin-top: 49px;
+                }
+                .capability__wrapper{
+                    display: flex;
+                    flex-wrap: wrap;
+                    width: 1244px;
+                    margin: 0 auto;
+                    margin-top: 5px;
+                }
+                .capability__item{
+                    width: 404px;
+                    height: 167px;
+                    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
+                    border-radius: 6px;
+                    display: none;
+                    text-decoration: none;
+                    margin-right: 16px;
+                    margin-bottom: 16px;
+                    transition: .3s;
+                }
+                .capability__item.active{
+                    display: flex;
+                }
+                .capability__item:hover{
+                    box-shadow: 0 10px 6px rgba(0, 0, 0, 0.09), 0 1px 6px rgba(0, 0, 0, 0.15);
+                }
+                .capability__item:nth-child(3n){
+                    margin-right: 0;
+                }
+                .capability__item_icon{
+                    width: 121px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: baseline;
+                    margin-top: 61px;
+                }
+                .capability__item_text{
+                    margin-top: 53px;
+                    padding-right: 30px;
+                    box-sizing: border-box;
+                    width: calc(100% - 121px);
+                }
+                .capability__item_title{
+                    margin-bottom: 3px;
+                    font-family: Imago, 'PT Sans', sans-serif;
+                    font-size: 25px;
+                    font-weight: 600;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: normal;
+                    letter-spacing: 0.5px;
+                    color: #3e78bd;
+                }
+                .capability__item_description{
+                    font-family: Imago, 'PT Sans', sans-serif;
+                    font-size: 18px;
+                    font-weight: normal;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: normal;
+                    letter-spacing: 0.4px;
+                    color: #000000;
+                }
+                .more_capability{
+                    width: 224px;
+                    height: 49px;
+                    position: relative;
+                    border-radius: 6px;
+                    background-color: #3e78bd;
+                    display: flex;
+                    margin-bottom: 25px;
+                    color: #ffffff;
+                    font-family: Arial;
+                    font-size: 14px;
+                    font-weight: 300;
+                    letter-spacing: 0.32px;
+                    border: 0;
+                    padding-left: 50px;
+                    margin: 0 auto;
+                    margin-top: 20px;
+                    cursor: pointer;
+                }
+                .arrowMore{
+                    display: block;
+                    background: url("https://sites.google.com/a/roche.com/user-productivity-tools/arrow.png") no-repeat;
+                    width: 11px;
+                    height: 6px;
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%) rotate(0);
+                    left: 23px;
+                    background-size: cover;
+                    transition: .2s;
+                }
+                .active .arrowMore{
+                    transform: translateY(-50%) rotate(180deg);
+                }
+                .cap_apps{
+                    font-family: Imago, sans-serif;
+                    font-size: 30px;
+                    font-weight: 600;
+                    font-style: normal;
+                    font-stretch: normal;
+                    line-height: normal;
+                    letter-spacing: 0.6px;
+                    text-align: center;
+                    color: #000000;
+                    margin-top: 40px;
+                }
+                .mainError i {
+                    font-style: normal;
+                }
             </style>
             <div class="search__wrapper">
                 <h2>Supported application</h2>
@@ -402,7 +582,16 @@
 
                 <div class="search__wrapper_inner">
                     <div class="search_error" style="display: none;">
-                        Not found data
+                        <img src="https://sites.google.com/a/roche.com/user-productivity-tools/ico-nosearch.png" alt="">
+                        <p class="mainError">
+                            Sorry, we couldn't find any applications for "<i></i>". <br>If you want to carry on searching, here are a few tips:
+                        </p>
+                        <p class="mainErrorMal">
+                            Check your spelling.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Try searching for a one word.
+                        </p>
+                        <h3 class="cap_apps">Or try browsing our key application capabilities</h3>
+                        <div class="capability__wrapper"></div>
+                        <button type="button" onclick="showAllCapability()" class="more_capability"><span class="arrowMore"></span><span class="textButton">Show more applications</span></button>
                     </div>
                 </div>
             </div>

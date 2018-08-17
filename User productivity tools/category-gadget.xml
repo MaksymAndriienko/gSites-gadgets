@@ -9,7 +9,7 @@
   <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
   <script>
 function init(){
-    var url = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/od6/public/basic?alt=json";
+    var url = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/od6/public/full?alt=json";
     $.ajax({
         url:url,
         async: false,
@@ -24,11 +24,13 @@ function init(){
     function createObj(dataEntry){
         dataEntry.forEach(function(response){
             var returnObj = {};
+            returnObj["description"] = response['gsx$description']['$t'];
             response = response['content']['$t'].split(", ");
-
             response.forEach(function(el){
                 var elArry = el.split(": ");
-                returnObj[elArry[0]] = elArry[1];
+                if(elArry[0] != "description"){
+                  returnObj[elArry[0]] = elArry[1];
+                }
             });
             
             arrayToShow.push(returnObj);
@@ -44,7 +46,8 @@ function init(){
    var $wrapper = $('.capability__wrapper');
    countToVisible = data[0].countvisibleapps;
     data.forEach(function(el, index){
-      $wrapper.append("<a target='_parent' class='capability__item " + (index >= countToVisible ? '':'active') + "' href='" + el.urltoapplication + "'><div class='capability__item_icon'><img src='" + el.urlicon + "' alt=''/></div><div class='capability__item_text'><div class='capability__item_title'>" + el.capabilities + "</div><div class='capability__item_description'>" + el.description + "</div></div></a>");
+      var url = "https://sites.google.com/a/roche.com/user-productivity-tools/supported-applications/" + el.urltoapplication.toLowerCase().replace(new RegExp(' ', 'g'), '-');
+      $wrapper.append("<a target='_parent' class='capability__item " + (index >= countToVisible ? '':'active') + "' href='" + url + "'><div class='capability__item_icon'><img src='" + el.urlicon + "' alt=''/></div><div class='capability__item_text'><div class='capability__item_title'>" + el.capabilities + "</div><div class='capability__item_description'>" + el.description + "</div></div></a>");
     });
     gadgets.window.adjustHeight();
   }

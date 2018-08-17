@@ -18,9 +18,9 @@
 
         var applicationName = urlApp.replace(new RegExp('-', 'g'), '%20');
 
-        var urlApplicationDetails = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/4/public/basic?alt=json&sq=applicationname=\"" + applicationName + "\"";
-        var urlSupportApps = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/5/public/basic?alt=json&sq=applicationname=\"" + applicationName + "\"";
-        var urlNOTSupportApps = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/6/public/basic?alt=json&sq=applicationname=\"" + applicationName + "\"";
+        var urlApplicationDetails = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/4/public/full?alt=json&sq=applicationname=\"" + applicationName + "\"";
+        var urlSupportApps = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/5/public/full?alt=json&sq=applicationname=\"" + applicationName + "\"";
+        var urlNOTSupportApps = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/6/public/full?alt=json&sq=applicationname=\"" + applicationName + "\"";
 
         sendRequest(urlApplicationDetails, buildHTLMDetails);
         sendRequest(urlSupportApps, buildHTLMSupported);
@@ -46,11 +46,35 @@
         var arrayToShow = [];
         dataEntry.forEach(function(response){
             var returnObj = {};
+            if(response['gsx$description'] && response['gsx$description']['$t'] != ""){
+                returnObj["description"] = response['gsx$description']['$t'];
+            }
+            if(response['gsx$crucialfunctions'] && response['gsx$crucialfunctions']['$t'] != ""){
+                returnObj["crucialfunctions"] = response['gsx$crucialfunctions']['$t'];
+            }
+            if(response['gsx$cost'] && response['gsx$cost']['$t'] != ""){
+                console.log(response['gsx$cost']['$t']);
+                returnObj["cost"] = response['gsx$cost']['$t'];
+            }
+            if(response['gsx$approvalpolicy'] && response['gsx$approvalpolicy']['$t'] != ""){
+                returnObj["approvalpolicy"] = response['gsx$approvalpolicy']['$t'];
+            }
+            if(response['gsx$deliverytime'] && response['gsx$deliverytime']['$t'] != ""){
+                returnObj["deliverytime"] = response['gsx$deliverytime']['$t'];
+            }
+            if(response['gsx$devicecompatibility'] && response['gsx$devicecompatibility']['$t'] != ""){
+                returnObj["devicecompatibility"] = response['gsx$devicecompatibility']['$t'];
+            }
+            if(response['gsx$mobileappavailability'] && response['gsx$mobileappavailability']['$t'] != ""){
+                returnObj["mobileappavailability"] = response['gsx$mobileappavailability']['$t'];
+            }
             response = response['content']['$t'].split(", ");
 
             response.forEach(function(el){
                 var elArry = el.split(": ");
-                returnObj[elArry[0]] = elArry[1];
+                if(elArry[0] != "description" && elArry[0] != "crucialfunctions" && elArry[0] != "cost" && elArry[0] != "approvalpolicy" && elArry[0] != "deliverytime" && elArry[0] != "devicecompatibility" && elArry[0] != "mobileappavailability"){
+                    returnObj[elArry[0]] = elArry[1];
+                }
             });
             
             arrayToShow.push(returnObj);
@@ -100,7 +124,7 @@
         var $wrapper = $('.supported_apps_wrapper__inner');
         apps.forEach(function(el){
             var url = el.similarapplication.toLowerCase();
-            url = url.replace(" ", "-");
+            url = url.replace(new RegExp(" ", 'g'), "-");
             $wrapper.append("<a target='_parent' href='https://sites.google.com/a/roche.com/user-productivity-tools/supported-applications/" + url + "' class='supported_app_item'> \
                                 <h4 class='supported_app_item_title'>" + el.similarapplication + "</h4> \
                                 <p>" + el.shortdescription + "</p> \
@@ -122,14 +146,11 @@
     }
 
     function setCapability(capability){
-        $(".information__title b").html(capability);
-        $(".not_recommeded_apps_title span").html(capability);
-        $(".supported_apps_wrapper h2 span").html(capability);
+        $(".information__title b, .not_recommeded_apps_title span, .supported_apps_wrapper h2 span").html(capability);
     }
 
     function showAllInformation(){
-        $(".details__information").toggleClass("active");
-        $(".more_capability").toggleClass("active");
+        $(".details__information, .more_capability").toggleClass("active");
         if($(".more_capability").hasClass('active')){
           $(".textButton").html("Read less");
         }
@@ -468,7 +489,7 @@
     }
 </style>
 <div class="information__title">
-    The best recommended and supported application for <b>project planning and online collaboration</b>
+    The best recommended and supported application for <b></b>
 </div>
 <div class="information__wrapper">
     <div class="simple__information">
