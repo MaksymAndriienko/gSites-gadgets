@@ -21,10 +21,12 @@
         var urlApplicationDetails = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/4/public/full?alt=json&sq=applicationname=\"" + applicationName + "\"";
         var urlSupportApps = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/5/public/full?alt=json&sq=applicationname=\"" + applicationName + "\"";
         var urlNOTSupportApps = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/6/public/full?alt=json&sq=applicationname=\"" + applicationName + "\"";
+        var urlContentNOTSupportApps = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/1/public/full?alt=json&sq=contenttonotrecommendedapplications!=%22%22"
 
         sendRequest(urlApplicationDetails, buildHTLMDetails);
         sendRequest(urlSupportApps, buildHTLMSupported);
         sendRequest(urlNOTSupportApps, buildHTLMNotSupported);
+        sendRequest(urlContentNOTSupportApps, setContentToNOTSupportApps);
 
         gadgets.window.adjustHeight();
     }
@@ -52,8 +54,10 @@
             if(response['gsx$crucialfunctions'] && response['gsx$crucialfunctions']['$t'] != ""){
                 returnObj["crucialfunctions"] = response['gsx$crucialfunctions']['$t'];
             }
+            if(response['gsx$contenttonotrecommendedapplications'] && response['gsx$contenttonotrecommendedapplications']['$t'] != ""){
+                returnObj["contenttonotrecommendedapplications"] = response['gsx$contenttonotrecommendedapplications']['$t'];
+            }
             if(response['gsx$cost'] && response['gsx$cost']['$t'] != ""){
-                console.log(response['gsx$cost']['$t']);
                 returnObj["cost"] = response['gsx$cost']['$t'];
             }
             if(response['gsx$approvalpolicy'] && response['gsx$approvalpolicy']['$t'] != ""){
@@ -72,7 +76,7 @@
 
             response.forEach(function(el){
                 var elArry = el.split(": ");
-                if(elArry[0] != "description" && elArry[0] != "crucialfunctions" && elArry[0] != "cost" && elArry[0] != "approvalpolicy" && elArry[0] != "deliverytime" && elArry[0] != "devicecompatibility" && elArry[0] != "mobileappavailability"){
+                if(elArry[0] != "contenttonotrecommendedapplications" && elArry[0] != "description" && elArry[0] != "crucialfunctions" && elArry[0] != "cost" && elArry[0] != "approvalpolicy" && elArry[0] != "deliverytime" && elArry[0] != "devicecompatibility" && elArry[0] != "mobileappavailability"){
                     returnObj[elArry[0]] = elArry[1];
                 }
             });
@@ -82,6 +86,10 @@
 
         buildFunction(arrayToShow);
     };  
+
+    function setContentToNOTSupportApps(content){
+        $(".text_not_recommeded_apps_inner").html(content[0].contenttonotrecommendedapplications);
+    }
 
     function buildHTLMDetails(app){
         app = app[0];
@@ -469,6 +477,7 @@
         padding-right: 10px;
         box-sizing: border-box;
         margin-right: 13px;
+        margin-bottom: 20px;
     }
     a.not_recommeded_app_item:nth-child(3n){
         margin-right: 0;
@@ -485,7 +494,7 @@
         color: #000000;
     }
     .not_recommeded_apps_inner_wrap{
-        margin-bottom: 31px;
+        margin-bottom: 0;
     }
 </style>
 <div class="information__title">
@@ -524,7 +533,7 @@
 <div class="not_recommeded_apps_wrapper" style="display: none;">
     <h2 class="not_recommeded_apps_title">Similiar <i>NOT recommended</i> applications for <span></span></h2>
     <div class="not_recommeded_apps_inner">
-        <p>Following applications were veryfied and have not met companie's standards in terms of <b>licence policy, supportability, costs, security</b>. TODO add explainatin from end-user perspective</p>
+        <p class="text_not_recommeded_apps_inner"></p>
         <div class="not_recommeded_apps_inner_wrap">
 
         </div>
