@@ -18,7 +18,10 @@
                 if(splitted_url[5] == "user-productivity-tools" && splitted_url[6] == ""){
                     $($('.menu__wrapper_inner a')[0]).addClass('active');
                 }
-                else if(splitted_url[6] != ""){
+                else if(splitted_url[6] == "suggest-an-application"){
+                    $($('.menu__wrapper_inner a')[2]).addClass('active');
+                }
+                else if(splitted_url[6] != "" && splitted_url[6] != "suggest-an-application"){
                     $($('.menu__wrapper_inner a')[1]).addClass('active');
                 }
             });
@@ -76,6 +79,7 @@
             <ul>
                 <li><a target="_top" href="https://sites.google.com/a/roche.com/user-productivity-tools">Home</li>
                 <li><a target="_top" href="https://sites.google.com/a/roche.com/user-productivity-tools/supported-applications">Supported applications</li>
+                <li><a target="_top" href="https://sites.google.com/a/roche.com/user-productivity-tools/suggest-an-application">Suggest an application</li>
             </ul>
         </div>
     </div>

@@ -19,7 +19,7 @@
                         ? document.referrer
                         : document.location.href;
 
-                var url = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/7/public/full?alt=json";
+                var url = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/8/public/full?alt=json";
                 var urlCapability = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/od6/public/full?alt=json";
 
                 sendRequest(url, createObj);

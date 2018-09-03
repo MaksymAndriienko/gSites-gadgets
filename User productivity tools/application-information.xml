@@ -19,14 +19,10 @@
         var applicationName = urlApp.replace(new RegExp('-', 'g'), '%20');
 
         var urlApplicationDetails = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/4/public/full?alt=json&sq=applicationname=\"" + applicationName + "\"";
-        var urlSupportApps = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/5/public/full?alt=json&sq=applicationname=\"" + applicationName + "\"";
-        var urlNOTSupportApps = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/6/public/full?alt=json&sq=applicationname=\"" + applicationName + "\"";
-        var urlContentNOTSupportApps = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/1/public/full?alt=json&sq=contenttonotrecommendedapplications!=%22%22"
+        var urlSupportApps = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/5/public/full?alt=json&sq=mainapplication=\"" + applicationName + "\"";
 
         sendRequest(urlApplicationDetails, buildHTLMDetails);
         sendRequest(urlSupportApps, buildHTLMSupported);
-        sendRequest(urlNOTSupportApps, buildHTLMNotSupported);
-        sendRequest(urlContentNOTSupportApps, setContentToNOTSupportApps);
 
         gadgets.window.adjustHeight();
     }
@@ -87,15 +83,12 @@
         buildFunction(arrayToShow);
     };  
 
-    function setContentToNOTSupportApps(content){
-        $(".text_not_recommeded_apps_inner").html(content[0].contenttonotrecommendedapplications);
-    }
-
     function buildHTLMDetails(app){
         app = app[0];
+        
         $(".simple__information_name").html(app.applicationname);
         $(".simple__information_description").html(app.description);
-
+        $(".information__title i.second-text").html(app.header);
         var listFunctions = app.crucialfunctions.split("\n");
         listFunctions.forEach(function(el){
             $(".details__information_box_list").append("<li>" + el + "</li>");
@@ -130,31 +123,37 @@
 
     function buildHTLMSupported(apps){
         var $wrapper = $('.supported_apps_wrapper__inner');
-        apps.forEach(function(el){
-            var url = el.similarapplication.toLowerCase();
-            url = url.replace(new RegExp(" ", 'g'), "-");
-            $wrapper.append("<a target='_parent' href='https://sites.google.com/a/roche.com/user-productivity-tools/supported-applications/" + url + "' class='supported_app_item'> \
-                                <h4 class='supported_app_item_title'>" + el.similarapplication + "</h4> \
-                                <p>" + el.shortdescription + "</p> \
-                            </a>");
+        apps.forEach(function(app, index){
+            var category  = app.category.toLowerCase();
+            category = category.replace(new RegExp(' ', 'g'), '');
+            if($("." + category).length == 0){
+                $(".supported_apps_wrapper__inner").append("<div class='similiar_category " + category + "'> \
+                    <h3>" + app.category + "</h3> \
+                    <div class='similiar_category_wrap'></div></div>");
+            }
+            $("." + category + " .similiar_category_wrap").append("<div class='similiar__app'> \
+                    <div class='similiar__app_icon'> \
+                        <img src='" + app.imagelogo + "'> \
+                    </div> \
+                    <div class='similiar__app_text'> \
+                        <h4>" + app.applicationname + "</h4> \
+                        <p>" + app.description + "</p> \
+                    </div> \
+                    <div class='similiar__app_req'>" + app.additinalinformation.replace(new RegExp('\n', 'g'), '<br>') + "</div> \
+                </div>");
         });
+        if($(".similiar_category").length > 3 || $(".similiar__app").length > 4 || $(".similiar_category").length == 1){
+            $(".similiar_category").each(function(index, el){
+                $(el).addClass("full-width");
+            });
+            $(".supported_apps_wrapper__inner").addClass("full-width");
+        }
         $(".supported_apps_wrapper").css("display", "");
         gadgets.window.adjustHeight();
     }
 
-    function buildHTLMNotSupported(apps){
-        var $wrapper = $('.not_recommeded_apps_inner_wrap');
-        apps.forEach(function(el){
-            $wrapper.append("<a class='not_recommeded_app_item'> \
-                                <p>" + el.notrecommendedapplicationname + "</p> \
-                            </a>");
-        });
-        $(".not_recommeded_apps_wrapper").css("display", "");
-        gadgets.window.adjustHeight();
-    }
-
     function setCapability(capability){
-        $(".information__title b, .not_recommeded_apps_title span, .supported_apps_wrapper h2 span").html(capability);
+        $(".information__title b i.first-text, .not_recommeded_apps_title span, .supported_apps_wrapper h2 span").html(capability);
     }
 
     function showAllInformation(){
@@ -297,7 +296,7 @@
         font-weight: normal;
         font-style: normal;
         font-stretch: normal;
-        line-height: 0.6;
+        line-height: 1;
         letter-spacing: normal;
         color: #000000;
     }
@@ -496,9 +495,156 @@
     .not_recommeded_apps_inner_wrap{
         margin-bottom: 0;
     }
+    .supported_apps_wrapper__inner{
+        border-radius: 6px;
+        background-color: #ffffff;
+        box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.15);
+        margin-bottom: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        box-sizing: border-box;
+        padding: 0 33px 85px 33px;
+        //justify-content: space-between;
+        position: relative;
+    }
+    .similiar_category h3{
+        font-family: Imago;
+        font-size: 20px;
+        font-weight: 600;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: 0.4px;
+        color: #000000;
+        text-align: center;
+        margin-top: 23px;
+        margin-bottom: 23px;
+    }
+    .similiar__app{
+        width: 270px;
+        height: 367.5px;
+        border-radius: 6px;
+        background-color: #ffffff;
+        box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.15);
+        box-sizing: border-box;
+        padding-top: 30px;
+        position: relative;
+        padding-left: 27px;
+        padding-right: 27px;
+        margin-left: 15px;
+        margin-bottom: 15px;
+    }
+    .similiar__app_icon{
+        width: 96px;
+        height: 96px;
+        background-color: #ffffff;
+        border-radius: 50%;
+        box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.15);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+        margin-bottom: 21px;
+    }
+    .similiar__app_icon img{
+        max-width: 55px;
+    }
+    .similiar__app_text h4{
+        font-family: Imago;
+        font-size: 25px;
+        font-weight: 600;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: 0.5px;
+        text-align: center;
+        color: #000000;
+        margin: 0;
+    }
+    .similiar__app_text p{
+        font-family: Imago;
+        font-size: 18px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: 0.4px;
+        text-align: center;
+        color: #000000;
+        margin-top: 12px;
+        margin-bottom: 0;
+        height: 70px;
+        overflow: hidden;
+    }
+    .similiar__app_req{
+        font-family: Imago !important;
+        font-size: 18px;
+        font-weight: normal;
+        font-style: normal;
+        font-stretch: normal;
+        line-height: normal;
+        letter-spacing: 0.4px;
+        text-align: center;
+        color: #000000;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 93px;
+        left: 0;
+    }
+    .similiar__app_req a{
+        color: #4a90e2;
+        text-decoration: none;
+    }
+    .similiar__app_req span.danger{
+        font-family: Imago !important;
+        color: #d50000;
+    }
+    .similiar__app_req a:hover{
+        text-decoration: underline;
+    }
+    .similiar_category.additionalcost .similiar__app{
+        background-color: #ebebeb;
+    }
+    .similiar_category_wrap{
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .similiar_category{
+        //width: 555px;
+        margin-left: 74px;
+        position: relative;
+    }
+    .similiar_category:first-child{
+        //width: 555px;
+        margin-left: 0;
+    }
+    .similiar_category.full-width{
+        margin-left: 0;
+    }
+    .similiar_category.full-width .similiar__app:nth-child(4n + 1),
+    .similiar_category .similiar__app:first-child{
+        margin-left: 0 !important;
+    }
+    .similiar_category.full-width .similiar__app{
+        margin-left: 34px;
+    }
+    .similiar_category:first-child:before{
+        content: "";
+        width: 1px;
+        height: 275px;
+        background: #e7e7e7;
+        position: absolute;
+        right: -38px;
+        top: 33px;
+    }
+    .similiar_category.full-width:first-child:before{
+        display: none;
+    }
 </style>
+
 <div class="information__title">
-    The best recommended and supported application for <b></b>
+    The best recommended and supported application for <b><i class="first-text"></i> <i class="second-text"></i></b> 
 </div>
 <div class="information__wrapper">
     <div class="simple__information">
@@ -525,18 +671,9 @@
     <button type="button" onclick="showAllInformation()" class="more_capability hidden"><span class="arrowMore"></span><span class="textButton">Read more</span></button>
 </div>
 <div class="supported_apps_wrapper" style="display: none;">
-    <h2>Similiar supported applications for <span></span></h2>
+    <h2>Other applications for <span></span></h2>
     <div class="supported_apps_wrapper__inner">
-        
-    </div>
-</div>
-<div class="not_recommeded_apps_wrapper" style="display: none;">
-    <h2 class="not_recommeded_apps_title">Similiar <i>NOT recommended</i> applications for <span></span></h2>
-    <div class="not_recommeded_apps_inner">
-        <p class="text_not_recommeded_apps_inner"></p>
-        <div class="not_recommeded_apps_inner_wrap">
 
-        </div>
     </div>
 </div>
   ]]>
