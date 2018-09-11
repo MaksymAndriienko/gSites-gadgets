@@ -56,15 +56,15 @@ function init(){
     $('.capability__item').each(function(index, el){
       if(index >= countToVisible){
         $(el).toggleClass("active");
-        $(".more_capability").toggleClass("active");
+      }
+    });
+          $(".more_capability").toggleClass("active");
         if($(".more_capability").hasClass('active')){
           $(".textButton").html("Hide more applications");
         }
         else{
           $(".textButton").html("Show more applications");
         }
-      }
-    });
     gadgets.window.adjustHeight();
   }
   
