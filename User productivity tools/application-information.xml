@@ -18,8 +18,8 @@
 
         var applicationName = urlApp.replace(new RegExp('-', 'g'), '%20');
 
-        var urlApplicationDetails = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/4/public/full?alt=json&sq=applicationname=\"" + applicationName + "\"";
-        var urlSupportApps = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/5/public/full?alt=json&sq=mainapplication=\"" + applicationName + "\"";
+        var urlApplicationDetails = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/4/public/full?alt=json&sq=url=\"" + urlApp + "\"";
+        var urlSupportApps = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/5/public/full?alt=json&sq=urlapphidden=\"" + urlApp + "\"";
 
         sendRequest(urlApplicationDetails, buildHTLMDetails);
         sendRequest(urlSupportApps, buildHTLMSupported);
@@ -125,11 +125,15 @@
         var $wrapper = $('.supported_apps_wrapper__inner');
         apps.forEach(function(app, index){
             var category  = app.category.toLowerCase();
+            var additinalinformation = "";
             category = category.replace(new RegExp(' ', 'g'), '');
             if($("." + category).length == 0){
                 $(".supported_apps_wrapper__inner").append("<div class='similiar_category " + category + "'> \
                     <h3>" + app.category + "</h3> \
                     <div class='similiar_category_wrap'></div></div>");
+            }
+            if(app.additinalinformation != undefined){
+                additinalinformation = app.additinalinformation.replace(new RegExp('\n', 'g'), '<br>');
             }
             $("." + category + " .similiar_category_wrap").append("<div class='similiar__app'> \
                     <div class='similiar__app_icon'> \
@@ -139,7 +143,7 @@
                         <h4>" + app.applicationname + "</h4> \
                         <p>" + app.description + "</p> \
                     </div> \
-                    <div class='similiar__app_req'>" + app.additinalinformation.replace(new RegExp('\n', 'g'), '<br>') + "</div> \
+                    <div class='similiar__app_req'>" +  additinalinformation + "</div> \
                 </div>");
         });
         if($(".similiar_category").length > 3 || $(".similiar__app").length > 4 || $(".similiar_category").length == 1){
