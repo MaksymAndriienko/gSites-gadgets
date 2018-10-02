@@ -19,7 +19,7 @@
                         ? document.referrer
                         : document.location.href;
 
-                var url = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/8/public/full?alt=json";
+                var url = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/4/public/full?alt=json&sq=siteactivation=\"Page created\"";
                 var urlCapability = "https://spreadsheets.google.com/feeds/list/1wsybm0u3HvELqq0c7gjYWXmJUnJVm3W45q3G-eoX8bs/od6/public/full?alt=json";
 
                 sendRequest(url, createObj);
@@ -79,7 +79,7 @@
                 var $wrapper = $('.capability__wrapper');
                 countToVisible = data[0].countvisibleapps;
                     data.forEach(function(el, index){
-                    var url = "https://sites.google.com/a/roche.com/user-productivity-tools/supported-applications/" + el.urltoapplication.toLowerCase().replace(new RegExp(' ', 'g'), '-');
+                    var url = "https://sites.google.com/a/roche.com/user-productivity-tools/all-applications/" + el.urltoapplication.toLowerCase().replace(new RegExp(' ', 'g'), '-');
                     $wrapper.append("<a target='_parent' class='capability__item " + (index >= countToVisible ? '':'active') + "' href='" + url + "'><div class='capability__item_icon'><img src='" + el.urlicon + "' alt=''/></div><div class='capability__item_text'><div class='capability__item_title'>" + el.capabilities + "</div><div class='capability__item_description'>" + el.description + "</div></div></a>");
                     });
                 gadgets.window.adjustHeight();
@@ -120,7 +120,7 @@
             function buildHTLM(apps){
                 var $wrapper = $('.search__wrapper_inner');
                 apps.forEach(function(app){
-                    $wrapper.append("<a target='_parent' href='https://sites.google.com/a/roche.com/user-productivity-tools/supported-applications/" + app.url + "' class='application_item'> \
+                    $wrapper.append("<a target='_parent' href='https://sites.google.com/a/roche.com/user-productivity-tools/all-applications/" + app.url + "' class='application_item'> \
                         <div class='application_item_information'> \
                             <h4>" + app.applicationname + "</h4> \
                             <p>" + app.capability + "</p> \

@@ -46,7 +46,7 @@ function init(){
    var $wrapper = $('.capability__wrapper');
    countToVisible = data[0].countvisibleapps;
     data.forEach(function(el, index){
-      var url = "https://sites.google.com/a/roche.com/user-productivity-tools/supported-applications/" + el.urltoapplication.toLowerCase().replace(new RegExp(' ', 'g'), '-');
+      var url = "https://sites.google.com/a/roche.com/user-productivity-tools/all-applications/" + el.urltoapplication.toLowerCase().replace(new RegExp(' ', 'g'), '-');
       $wrapper.append("<a target='_parent' class='capability__item " + (index >= countToVisible ? '':'active') + "' href='" + url + "'><div class='capability__item_icon'><img src='" + el.urlicon + "' alt=''/></div><div class='capability__item_text'><div class='capability__item_title'>" + el.capabilities + "</div><div class='capability__item_description'>" + el.description + "</div></div></a>");
     });
     gadgets.window.adjustHeight();
